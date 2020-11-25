@@ -1,2 +1,2 @@
 # QChess
-This is a chess game class project which uses PyQt5 and has a multiplayer LAN mode
+This is a Python chess game class project which only uses PyQt5
