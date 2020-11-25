@@ -2,10 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 import socket
-import multiprocess
-from time import sleep
-from sys import exit
-
+import threading
 
 # Port used by the app for network connections. Could be changed
 PORT = 8000
@@ -58,8 +55,9 @@ class GuestNetworkSetUp(BaseWindow):
 
 
 class HostNetworkSetUp(BaseWindow):
-    def __init__(self):
+    def __init__(self, program):
         BaseWindow.__init__(self)
+        self.program = program
 
         # Avoids other windows to be manipulated
         self.setWindowModality(Qt.ApplicationModal)
@@ -71,22 +69,28 @@ class HostNetworkSetUp(BaseWindow):
 
         waiting_label = QLabel("Waiting for a player to join the game")
         self.main_layout.addWidget(waiting_label)
-        p = multiprocessing.Process(target=self.host_set_up)
+        p = threading.Thread(target=self.host_set_up)
         p.start()
-        p.join()
         self.show()
 
     def host_set_up(self):
+
+        def thread_print(*args):
+            lock = threading.Lock()
+            with lock:
+                print(*args)
+
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             sock.bind((self.ip, PORT))
             sock.listen()
+            # Accept locks the thread until a message is received
+
             connection, addr = sock.accept()
             # connection is a socket connected to the client
             with connection:
-                print('Connected by', addr)
-                while True:
-                    print("A")
-                    sleep(1)
+                thread_print('Connected by', addr)
+                while self.program.run_thread:
+                    thread_print("A")
                     data = connection.recv(1024)
                     print(data.decode("utf-8"))
                     if not data:
@@ -138,14 +142,8 @@ class MainWindow(BaseWindow):
 
     def host_mode_set_up(self):
         self.modeSelectionWindow.close()
-        self.host_set_up = HostNetworkSetUp()
+        self.host_set_up = HostNetworkSetUp(self)
 
     def guest_mode_set_up(self):
         self.modeSelectionWindow.close()
         self.guest_set_up = GuestNetworkSetUp()
-
-    def closeEvent(self, event):
-        QMainWindow.closeEvent(self, event)
-        self.app.quit()
-        self.host_set_up.stop_thread.set()
-
