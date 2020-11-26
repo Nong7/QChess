@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QGridLayout, QSizePolicy
 from PyQt5.QtGui import QFont, QPainter, QPen, QColor, QPixmap
 from PyQt5.QtCore import Qt, QPoint, QLine
-
+from pprint import pprint
 
 BOARD = [
     ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
@@ -11,7 +11,7 @@ BOARD = [
     ['--', '--', '--', '--', '--', '--', '--', '--'],
     ['--', '--', '--', '--', '--', '--', '--', '--'],
     ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
-    ['wR', 'wN', 'wB', 'wK', 'wQ', 'wB', 'wN', 'wR']
+    ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
 ]
 
 
@@ -25,6 +25,9 @@ class Piece(QLabel):
         self.is_selected = False
         self.setScaledContents(True)
 
+    def __repr__(self):
+        return f"{self.name}"
+
     @property
     def image(self):
         return QPixmap(f'./img/{self.name}.png')
@@ -33,22 +36,26 @@ class Piece(QLabel):
         self.is_selected = False
         self.update()
 
+    @property
+    def coords(self):
+        return self.x, self.y
+
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
         if self.game.turn == self.color:
             if self.name != "--":
-                self.is_selected = True
                 self.game.set_selected_piece(self)
+                self.is_selected = True
                 self.update()
             else:
-                # Todo: move if possible
-                pass
+                if self.game.selected_piece and self.game.selected_piece != self:
+                    self.game.move_pieces(self.coords, self.game.selected_piece.coords)
 
     def paintEvent(self, event):
         QLabel.paintEvent(self, event)
         x, y = self.width(), self.height()
         qp = QPainter(self)
-        if (self.x + self.y) % 2 == 0:
+        if (self.x + self.y) % 2 == 1:
             qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
         if self.is_selected:
             qp.fillRect(0, 0, x, y, QColor(255, 240, 0))
@@ -66,8 +73,7 @@ class GameWidget(QWidget):
         self.main_layout = QGridLayout()
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.main_layout)
-        self.board = BOARD
-        self.pieces = [["" for _ in range(8)] for _ in range(8)]
+        self.pieces = BOARD
         self.selected_piece = None
         font = QFont("Arial")
         font.setPointSize(10)
@@ -84,11 +90,26 @@ class GameWidget(QWidget):
             self.resize(self.width(), self.width())
 
     def set_up_pieces(self):
-        for i, row in enumerate(self.board):
+        for i, row in enumerate(self.pieces):
             for j, cell in enumerate(row):
-                a = Piece(self, cell, i, j)
-                self.pieces[i][j] = a
-                self.main_layout.addWidget(a, i, j)
+                # cell: str
+                piece = Piece(self, cell, i, j)
+                self.pieces[i][j] = piece
+                self.main_layout.addWidget(piece, i, j)
+
+    def arrange_pieces(self):
+        for i in range(8):
+            for j in range(8):
+                widget = self.main_layout.itemAtPosition(i, j).widget()
+                self.main_layout.removeWidget(widget)
+                widget.deleteLater()
+
+        for i, row in enumerate(self.pieces):
+            for j, cell in enumerate(row):
+                # cell: str
+                piece = Piece(self, cell.name, i, j)
+                self.pieces[i][j] = piece
+                self.main_layout.addWidget(piece, i, j)
 
     def set_selected_piece(self, piece: Piece):
         if self.selected_piece:
@@ -102,3 +123,9 @@ class GameWidget(QWidget):
         else:
             self.turn = "b"
             self.main_window.update_turn_label("Black's turn")
+
+    def move_pieces(self, coords1: tuple, coords2: tuple):
+        self.pieces[coords1[0]][coords1[1]], self.pieces[coords2[0]][coords2[1]] = \
+            self.pieces[coords2[0]][coords2[1]], self.pieces[coords1[0]][coords1[1]]
+
+        self.arrange_pieces()
