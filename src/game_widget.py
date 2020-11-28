@@ -96,6 +96,14 @@ class GameWidget(QWidget):
                 self.main_layout.addWidget(self.pieces[x][y], x, y)
         # self.debug_board()
 
+    def highlight_possible_moves(self):
+        if self.selected_piece:
+            possible_movements = self.selected_piece.possible_movements()
+            for movement in possible_movements:
+                # Todo: fix x and y swapping
+                self.pieces[movement[1]][movement[0]].highlight = True
+                self.pieces[movement[1]][movement[0]].update()
+
     def eat_piece(self, eater_coords, eated_coords):
         # print(eater_coords, " eated ", eated_coords)
 
