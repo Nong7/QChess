@@ -41,14 +41,6 @@ class GameWidget(QWidget):
         self.turn = "w"
         self.selected_piece = None
 
-    def resizeEvent(self, event):
-        QWidget.resizeEvent(self, event)
-        # Keeps square aspect ratio
-        if self.width() > self.height():
-            self.resize(self.height(), self.height())
-        else:
-            self.resize(self.width(), self.width())
-
     def set_up_pieces(self):
         self.pieces = [
             [Rook(self, 0, 0, "b"), Knight(self, 1, 0, "b"), Bishop(self, 2, 0, "b"), Queen(self, 3, 0, "b"),
@@ -72,25 +64,14 @@ class GameWidget(QWidget):
             for y in range(8):
                 self.main_layout.addWidget(self.pieces[x][y], x, y)
 
-    def arrange_pieces(self):
-        for i in range(8):
-            for j in range(8):
-                widget = self.main_layout.itemAtPosition(i, j).widget()
-                self.main_layout.removeWidget(widget)
-                widget.deleteLater()
-        for i, row in enumerate(self.pieces):
-            for j, cell in enumerate(row):
-                # cell: str
-                piece = Piece(self, cell.name, i, j)
-                self.pieces[i][j] = piece
-                self.main_layout.addWidget(piece, i, j)
-
     def set_selected_piece(self, piece):
         if self.selected_piece:
             self.selected_piece.unselect()
         self.selected_piece = piece
 
     def change_turn(self):
+        if self.selected_piece:
+            self.selected_piece.unselect()
         if self.turn == "b":
             self.turn = "w"
             self.main_window.update_turn_label("White's turn")
@@ -98,23 +79,83 @@ class GameWidget(QWidget):
             self.turn = "b"
             self.main_window.update_turn_label("Black's turn")
 
-    def eat_piece(self, new_piece):
-        # Todo que alguien fixee esta wea pleease UwU
+    def board(self):
+        mat = []
+        for i in range(8):
+            row = [self.main_layout.itemAtPosition(i, j).widget() for j in range(8)]
+            mat.append(row)
+        return mat
 
-        self.change_turn()
+    def update_board(self):
+        for x in range(8):
+            for y in range(8):
+                self.main_layout.removeWidget(self.pieces[x][y])
 
-    def swap_pieces(self, coords1: tuple, coords2: tuple):
-        # Watch out: columns and row swap
-        w1 = self.main_layout.itemAtPosition(coords1[1], coords1[0]).widget()
-        w2 = self.main_layout.itemAtPosition(coords2[1], coords2[0]).widget()
+        for x in range(8):
+            for y in range(8):
+                self.main_layout.addWidget(self.pieces[x][y], x, y)
+        # self.debug_board()
 
-        self.pieces[coords1[1]][coords1[0]], self.pieces[coords2[1]][coords2[0]] = \
-            self.pieces[coords2[1]][coords2[0]], self.pieces[coords1[1]][coords1[0]]
+    def eat_piece(self, eater_coords, eated_coords):
+        # print(eater_coords, " eated ", eated_coords)
 
-        self.main_layout.addWidget(w2, coords1[1], coords1[0])
-        self.main_layout.addWidget(w1, coords2[1], coords2[0])
-        w1.coords = coords2
-        w2.coords = coords1
+        eater_coords = eater_coords[1], eater_coords[0]
+        eated_coords = eated_coords[1], eated_coords[0]
+
+        self.main_layout.removeWidget(self.pieces[eated_coords[0]][eated_coords[1]])
+        self.pieces[eated_coords[0]][eated_coords[1]].deleteLater()
+
+        w1 = self.pieces[eater_coords[0]][eater_coords[1]]
+        w2 = Blank(self, *eater_coords)
+
+        self.pieces[eated_coords[0]][eated_coords[1]] = w1
+        self.pieces[eater_coords[0]][eater_coords[1]] = w2
+
+        self.update_board()
+
+        w1.coords = eated_coords[1], eated_coords[0]
+        w2.coords = eater_coords[1], eater_coords[0]
         w1.update()
         w2.update()
         self.change_turn()
+
+        # self.debug_board()
+
+    def swap_pieces(self, coords1: tuple, coords2: tuple):
+        coords1 = coords1[1], coords1[0]
+        coords2 = coords2[1], coords2[0]
+
+        # print("Swaped ", coords1, coords2)
+
+        # * is also an unpack operator, *(x, y) -> x, y
+        w1 = self.main_layout.itemAtPosition(*coords1).widget()
+        w2 = self.main_layout.itemAtPosition(*coords2).widget()
+
+        # Swap:
+        self.pieces[coords1[0]][coords1[1]], self.pieces[coords2[0]][coords2[1]] = \
+            self.pieces[coords2[0]][coords2[1]], self.pieces[coords1[0]][coords1[1]]
+
+        self.update_board()
+
+        w1.coords = coords2[1], coords2[0]
+        w2.coords = coords1[1], coords1[0]
+        w1.update()
+        w2.update()
+        self.change_turn()
+        # self.debug_board()
+
+    def resizeEvent(self, event):
+        QWidget.resizeEvent(self, event)
+        # Keeps square aspect ratio
+        if self.width() > self.height():
+            self.resize(self.height(), self.height())
+        else:
+            self.resize(self.width(), self.width())
+
+    def debug_board(self):
+        try:
+            assert self.board() == self.pieces
+        except AssertionError:
+            for row in self.board():
+                print(row)
+            # pprint(self.pieces, width=100)

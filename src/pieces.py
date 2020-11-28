@@ -12,9 +12,15 @@ class Piece(QLabel):
         self.setScaledContents(True)
 
     def __repr__(self):
+        if type(self).__name__ == "Blank":
+            return "Blank"
         return f"{type(self).__name__} ({self.color})"
 
     def select(self):
+        # Avoids multiple pieces to be selected:
+        if self.game.selected_piece:
+            self.game.selected_piece.unselect()
+
         self.is_selected = True
         self.game.selected_piece = self
         self.update()
@@ -26,20 +32,22 @@ class Piece(QLabel):
 
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
-
         if self.name == "blank":
             if self.game.selected_piece:
                 self.game.swap_pieces(self.coords, self.game.selected_piece.coords)
-                self.game.selected_piece.unselect()
-                self.unselect()
 
         elif self.color == self.game.turn:
             if not self.game.selected_piece:
                 # Todo: pathfinding
                 self.select()
+            else:
+                print("A")
+                self.select()
 
         elif self.color != self.game.turn and self.game.selected_piece:
-            self.game.eat_piece(self)
+            # Eated piece: self
+            # Eaten by: self.game.selected_piece
+            self.game.eat_piece(self.game.selected_piece.coords, self.coords)
 
     def paintEvent(self, event):
         QLabel.paintEvent(self, event)
@@ -48,6 +56,7 @@ class Piece(QLabel):
         if (self.coords[0] + self.coords[1]) % 2 == 1:
             qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
         if self.is_selected:
+            # Fills the background in yellow if the piece is selected
             qp.fillRect(0, 0, x, y, QColor(255, 240, 0))
         qp.drawPixmap(0, 0, x, y, self.image)
 
