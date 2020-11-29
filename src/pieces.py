@@ -175,10 +175,13 @@ class Pawn(Piece):
         if self.first_move:
             if self.color == "w":
                 positions.append((coords[0] - 1, coords[1]))
-                positions.append((coords[0] - 2, coords[1]))
+                # Avoids jumping
+                if isinstance(self.game.pieces[coords[0] - 1][coords[1]], Blank):
+                    positions.append((coords[0] - 2, coords[1]))
             else:
                 positions.append((coords[0] + 1, coords[1]))
-                positions.append((coords[0] + 2, coords[1]))
+                if isinstance(self.game.pieces[coords[0] + 1][coords[1]], Blank):
+                    positions.append((coords[0] + 2, coords[1]))
         else:
             if self.color == "w":
                 positions.append((coords[0] - 1, coords[1]))
@@ -187,19 +190,23 @@ class Pawn(Piece):
 
         movements = []
         if self.color == "w":
-            if self.game.pieces[coords[0] - 1][coords[1] + 1].color != self.color \
-                    and not isinstance(self.game.pieces[coords[0] - 1][coords[1] + 1], Blank):
-                movements.append((coords[0] - 1, coords[1] + 1))
-            if self.game.pieces[coords[0] - 1][coords[1] - 1].color != self.color \
-                    and not isinstance(self.game.pieces[coords[0] - 1][coords[1] - 1], Blank):
-                movements.append((coords[0] - 1, coords[1] - 1))
+            if not coords[1] == 7:
+                if self.game.pieces[coords[0] - 1][coords[1] + 1].color != self.color \
+                        and not isinstance(self.game.pieces[coords[0] - 1][coords[1] + 1], Blank):
+                    movements.append((coords[0] - 1, coords[1] + 1))
+            if not coords[1] == 0:
+                if self.game.pieces[coords[0] - 1][coords[1] - 1].color != self.color \
+                        and not isinstance(self.game.pieces[coords[0] - 1][coords[1] - 1], Blank):
+                    movements.append((coords[0] - 1, coords[1] - 1))
         else:
-            if self.game.pieces[coords[0] + 1][coords[1] + 1].color != self.color \
-                    and not isinstance(self.game.pieces[coords[0] + 1][coords[1] + 1], Blank):
-                movements.append((coords[0] + 1, coords[1] + 1))
-            if self.game.pieces[coords[0] + 1][coords[1] - 1].color != self.color \
-                    and not isinstance(self.game.pieces[coords[0] + 1][coords[1] - 1], Blank):
-                movements.append((coords[0] + 1, coords[1] - 1))
+            if not coords[0] == 7:
+                if self.game.pieces[coords[0] + 1][coords[1] + 1].color != self.color \
+                        and not isinstance(self.game.pieces[coords[0] + 1][coords[1] + 1], Blank):
+                    movements.append((coords[0] + 1, coords[1] + 1))
+            if not coords[0] == 0:
+                if self.game.pieces[coords[0] + 1][coords[1] - 1].color != self.color \
+                        and not isinstance(self.game.pieces[coords[0] + 1][coords[1] - 1], Blank):
+                    movements.append((coords[0] + 1, coords[1] - 1))
 
         for position in positions:
             if isinstance(self.game.pieces[position[0]][position[1]], Blank):
