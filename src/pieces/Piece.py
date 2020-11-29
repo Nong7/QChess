@@ -1,14 +1,14 @@
-from PyQt5.QtGui import QPainter, QColor, QPixmap
+from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtWidgets import QLabel
 
 
 class Piece(QLabel):
-    def __init__(self, game, x: int, y: int, color=""):
+    def __init__(self, game, x: int, y: int):
         QLabel.__init__(self)
         self.first_move = True
         self.coords = x, y
         self.game = game
-        self.color = color
+        self.color = None
         self.is_selected = False
         self.highlight = False
         self.setScaledContents(True)
@@ -44,9 +44,10 @@ class Piece(QLabel):
 
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
-        if self.name == "blank":
-            if self.game.selected_piece:
 
+        if self.name == "blank":
+
+            if self.game.selected_piece:
                 # Pawns can move two cells ahead only once
                 self.game.selected_piece.first_move = False
 

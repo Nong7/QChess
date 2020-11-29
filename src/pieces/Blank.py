@@ -1,5 +1,5 @@
-from PyQt5.QtGui import QPainter, QColor, QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QPixmap
+
 from .Piece import Piece
 
 

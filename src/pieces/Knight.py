@@ -1,14 +1,14 @@
-from PyQt5.QtGui import QPainter, QColor, QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QPixmap
+
 from .Piece import Piece
-from .Blank import Blank
 
 
 class WKnight(Piece):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y, "w")
+        Piece.__init__(self, game, x, y)
         self.image = QPixmap("./img/wN")
         self.name = "wN"
+        self.color = "w"
 
     def possible_movements(self):
         return [(1, 1)]
@@ -16,9 +16,10 @@ class WKnight(Piece):
 
 class BKnight(Piece):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y, "b")
+        Piece.__init__(self, game, x, y)
         self.image = QPixmap("./img/bN")
         self.name = "bN"
+        self.color = "b"
 
     def possible_movements(self):
         return [(1, 1)]
