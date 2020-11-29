@@ -19,47 +19,35 @@ class GameWidget(QWidget):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.main_layout)
 
-        self.pieces = [
-            [Rook(self, 0, 0, "b"), Knight(self, 1, 0, "b"), Bishop(self, 2, 0, "b"), Queen(self, 3, 0, "b"),
-             King(self, 4, 0, "b"), Bishop(self, 5, 0, "b"), Knight(self, 6, 0, "b"), Rook(self, 7, 0, "b")],
-            [Pawn(self, 0, 1, "b"), Pawn(self, 1, 1, "b"), Pawn(self, 2, 1, "b"), Pawn(self, 3, 1, "b"),
-             Pawn(self, 4, 1, "b"), Pawn(self, 5, 1, "b"), Pawn(self, 6, 1, "b"), Pawn(self, 7, 1, "b")],
-            [Blank(self, 0, 2), Blank(self, 1, 2), Blank(self, 2, 2), Blank(self, 3, 2),
-             Blank(self, 4, 2), Blank(self, 5, 2), Blank(self, 6, 2), Blank(self, 7, 2)],
-            [Blank(self, 0, 3), Blank(self, 1, 3), Blank(self, 2, 3), Blank(self, 3, 3),
-             Blank(self, 4, 3), Blank(self, 5, 3), Blank(self, 6, 3), Blank(self, 7, 3)],
-            [Blank(self, 0, 4), Blank(self, 1, 4), Blank(self, 2, 4), Blank(self, 3, 4),
-             Blank(self, 4, 4), Blank(self, 5, 4), Blank(self, 6, 4), Blank(self, 7, 4)],
-            [Blank(self, 0, 5), Blank(self, 1, 5), Blank(self, 2, 5), Blank(self, 3, 5),
-             Blank(self, 4, 5), Blank(self, 5, 5), Blank(self, 6, 5), Blank(self, 7, 5)],
-            [Pawn(self, 0, 6, "w"), Pawn(self, 1, 6, "w"), Pawn(self, 2, 6, "w"), Pawn(self, 3, 6, "w"),
-             Pawn(self, 4, 6, "w"), Pawn(self, 5, 6, "w"), Pawn(self, 6, 6, "w"), Pawn(self, 7, 6, "w")],
-            [Rook(self, 0, 7, "w"), Knight(self, 1, 7, "w"), Bishop(self, 2, 7, "w"), Queen(self, 3, 7, "w"),
-             King(self, 4, 7, "w"), Bishop(self, 5, 7, "w"), Knight(self, 6, 7, "w"), Rook(self, 7, 7, "w")]
+        # Initial board state
+        self.PIECES = [
+            [Rook(self, 0, 0, "b"), Knight(self, 0, 1, "b"), Bishop(self, 0, 2, "b"), Queen(self, 0, 3, "b"),
+             King(self, 0, 4, "b"), Bishop(self, 0, 5, "b"), Knight(self, 0, 6, "b"), Rook(self, 0, 7, "b")],
+            [Pawn(self, 1, 0, "b"), Pawn(self, 1, 1, "b"),   Pawn(self, 1, 2, "b"),   Pawn(self, 1, 3, "b"),
+             Pawn(self, 1, 4, "b"), Pawn(self, 1, 5, "b"),   Pawn(self, 1, 6, "b"),   Pawn(self, 1, 7, "b")],
+            [Blank(self, 2, 0),     Blank(self, 2, 1),       Blank(self, 2, 2),       Blank(self, 2, 3),
+             Blank(self, 2, 4),     Blank(self, 2, 5),       Blank(self, 2, 6),       Blank(self, 2, 7)],
+            [Blank(self, 3, 0),     Blank(self, 3, 1),       Blank(self, 3, 2),       Blank(self, 3, 3),
+             Blank(self, 3, 4),     Blank(self, 3, 5),       Blank(self, 3, 6),       Blank(self, 3, 7)],
+            [Blank(self, 4, 0),     Blank(self, 4, 1),       Blank(self, 4, 2),       Blank(self, 4, 3),
+             Blank(self, 4, 4),     Blank(self, 4, 5),       Blank(self, 4, 6),       Blank(self, 4, 7)],
+            [Blank(self, 5, 0),     Blank(self, 5, 1),       Blank(self, 5, 2),       Blank(self, 5, 3),
+             Blank(self, 5, 4),     Blank(self, 5, 5),       Blank(self, 5, 6),       Blank(self, 5, 7)],
+            [Pawn(self, 6, 0, "w"), Pawn(self, 6, 1, "w"),   Pawn(self, 6, 2, "w"),   Pawn(self, 6, 3, "w"),
+             Pawn(self, 6, 4, "w"), Pawn(self, 6, 5, "w"),   Pawn(self, 6, 6, "w"),   Pawn(self, 6, 7, "w")],
+            [Rook(self, 7, 0, "w"), Knight(self, 7, 1, "w"), Bishop(self, 7, 2, "w"), Queen(self, 7, 3, "w"),
+             King(self, 7, 4, "w"), Bishop(self, 7, 5, "w"), Knight(self, 7, 6, "w"), Rook(self, 7, 7, "w")]
         ]
+        # Ugly way of doing a fake deepcopy of a list of lists
+        self.pieces = [row[:] for row in self.PIECES]
+
         self.set_up_pieces()
         self.turn = "w"
         self.selected_piece = None
 
     def set_up_pieces(self):
-        self.pieces = [
-            [Rook(self, 0, 0, "b"), Knight(self, 1, 0, "b"), Bishop(self, 2, 0, "b"), Queen(self, 3, 0, "b"),
-             King(self, 4, 0, "b"), Bishop(self, 5, 0, "b"), Knight(self, 6, 0, "b"), Rook(self, 7, 0, "b")],
-            [Pawn(self, 0, 1, "b"), Pawn(self, 1, 1, "b"), Pawn(self, 2, 1, "b"), Pawn(self, 3, 1, "b"),
-             Pawn(self, 4, 1, "b"), Pawn(self, 5, 1, "b"), Pawn(self, 6, 1, "b"), Pawn(self, 7, 1, "b")],
-            [Blank(self, 0, 2), Blank(self, 1, 2), Blank(self, 2, 2), Blank(self, 3, 2),
-             Blank(self, 4, 2), Blank(self, 5, 2), Blank(self, 6, 2), Blank(self, 7, 2)],
-            [Blank(self, 0, 3), Blank(self, 1, 3), Blank(self, 2, 3), Blank(self, 3, 3),
-             Blank(self, 4, 3), Blank(self, 5, 3), Blank(self, 6, 3), Blank(self, 7, 3)],
-            [Blank(self, 0, 4), Blank(self, 1, 4), Blank(self, 2, 4), Blank(self, 3, 4),
-             Blank(self, 4, 4), Blank(self, 5, 4), Blank(self, 6, 4), Blank(self, 7, 4)],
-            [Blank(self, 0, 5), Blank(self, 1, 5), Blank(self, 2, 5), Blank(self, 3, 5),
-             Blank(self, 4, 5), Blank(self, 5, 5), Blank(self, 6, 5), Blank(self, 7, 5)],
-            [Pawn(self, 0, 6, "w"), Pawn(self, 1, 6, "w"), Pawn(self, 2, 6, "w"), Pawn(self, 3, 6, "w"),
-             Pawn(self, 4, 6, "w"), Pawn(self, 5, 6, "w"), Pawn(self, 6, 6, "w"), Pawn(self, 7, 6, "w")],
-            [Rook(self, 0, 7, "w"), Knight(self, 1, 7, "w"), Bishop(self, 2, 7, "w"), Queen(self, 3, 7, "w"),
-             King(self, 4, 7, "w"), Bishop(self, 5, 7, "w"), Knight(self, 6, 7, "w"), Rook(self, 7, 7, "w")]
-        ]
+        # Ugly way of doing a fake deepcopy of a list of lists
+        self.pieces = [row[:] for row in self.PIECES]
         for x in range(8):
             for y in range(8):
                 self.main_layout.addWidget(self.pieces[x][y], x, y)
@@ -100,15 +88,11 @@ class GameWidget(QWidget):
         if self.selected_piece:
             possible_movements = self.selected_piece.possible_movements()
             for movement in possible_movements:
-                # Todo: fix x and y swapping
-                self.pieces[movement[1]][movement[0]].highlight = True
-                self.pieces[movement[1]][movement[0]].update()
+                self.pieces[movement[0]][movement[1]].highlight = True
+                self.pieces[movement[0]][movement[1]].update()
 
     def eat_piece(self, eater_coords, eated_coords):
         # print(eater_coords, " eated ", eated_coords)
-
-        eater_coords = eater_coords[1], eater_coords[0]
-        eated_coords = eated_coords[1], eated_coords[0]
 
         self.main_layout.removeWidget(self.pieces[eated_coords[0]][eated_coords[1]])
         self.pieces[eated_coords[0]][eated_coords[1]].deleteLater()
@@ -121,8 +105,8 @@ class GameWidget(QWidget):
 
         self.update_board()
 
-        w1.coords = eated_coords[1], eated_coords[0]
-        w2.coords = eater_coords[1], eater_coords[0]
+        w1.coords = eated_coords
+        w2.coords = eater_coords
         w1.update()
         w2.update()
         self.change_turn()
@@ -130,9 +114,6 @@ class GameWidget(QWidget):
         # self.debug_board()
 
     def swap_pieces(self, coords1: tuple, coords2: tuple):
-        coords1 = coords1[1], coords1[0]
-        coords2 = coords2[1], coords2[0]
-
         # print("Swaped ", coords1, coords2)
 
         # * is also an unpack operator, *(x, y) -> x, y
@@ -145,8 +126,8 @@ class GameWidget(QWidget):
 
         self.update_board()
 
-        w1.coords = coords2[1], coords2[0]
-        w2.coords = coords1[1], coords1[0]
+        w1.coords = coords2
+        w2.coords = coords1
         w1.update()
         w2.update()
         self.change_turn()

@@ -45,22 +45,23 @@ class Piece(QLabel):
         QLabel.mousePressEvent(self, event)
         if self.name == "blank":
             if self.game.selected_piece:
-                if isinstance(self, Pawn):
-                    self.first_move = False
-                self.game.swap_pieces(self.coords, self.game.selected_piece.coords)
+
+                # Pawns can move two cells ahead only once
+                if isinstance(self.game.selected_piece, Pawn):
+                    self.game.selected_piece.first_move = False
+
+                if self.highlight:
+                    self.game.swap_pieces(self.coords, self.game.selected_piece.coords)
 
         elif self.color == self.game.turn:
             if not self.game.selected_piece:
-                # Todo: pathfinding
-                self.select()
-            else:
-                print("A")
                 self.select()
 
         elif self.color != self.game.turn and self.game.selected_piece:
             # Eated piece: self
             # Eaten by: self.game.selected_piece
-            self.game.eat_piece(self.game.selected_piece.coords, self.coords)
+            if self.highlight:
+                self.game.eat_piece(self.game.selected_piece.coords, self.coords)
 
     def paintEvent(self, event):
         QLabel.paintEvent(self, event)
@@ -95,10 +96,7 @@ class Rook(Piece):
 
     def possible_movements(self):
         position = self.coords
-        movements = []
-        if isinstance(self.game.pieces[position[0]][position[1]]) \
-                or self.game.pieces[position[0]][position[1]].color != self.color:
-            movements.append(position)
+        movements = [(1, 1)]
 
         return movements
 
@@ -174,20 +172,18 @@ class Pawn(Piece):
         positions = []
         if self.first_move:
             if self.color == "w":
-                positions.append((self.coords[0], self.coords[1] - 1))
-                positions.append((self.coords[0], self.coords[1] - 2))
+                positions.append((self.coords[0] - 1, self.coords[1]))
+                positions.append((self.coords[0] - 2, self.coords[1]))
             else:
-                positions.append((self.coords[0], self.coords[1] + 1))
-                positions.append((self.coords[0], self.coords[1] + 2))
+                positions.append((self.coords[0] + 1, self.coords[1]))
+                positions.append((self.coords[0] + 2, self.coords[1]))
         else:
             if self.color == "w":
-                positions.append((self.coords[0], self.coords[1] - 1))
+                positions.append((self.coords[0] - 1, self.coords[1]))
             else:
-                positions.append((self.coords[0], self.coords[1] + 1))
+                positions.append((self.coords[0] + 1, self.coords[1]))
         movements = []
-        print(positions)
         for position in positions:
-            print(self.game.pieces[position[0]][position[1]])
             if isinstance(self.game.pieces[position[0]][position[1]], Blank) \
                     or self.game.pieces[position[0]][position[1]].color != self.color:
                 movements.append(position)
