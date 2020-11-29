@@ -1,6 +1,7 @@
 from PyQt5.QtGui import QPixmap
 
 from .Piece import Piece
+from .Blank import Blank
 
 
 class WQueen(Piece):

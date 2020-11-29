@@ -1,6 +1,7 @@
 from PyQt5.QtGui import QPixmap
 
 from .Piece import Piece
+from .Blank import Blank
 
 
 class WKnight(Piece):
@@ -12,29 +13,37 @@ class WKnight(Piece):
 
     def possible_movements(self):
         positions = []
-        if (self.coords[0] - 2) >= (0) and (self.coords[1] - 1) >= (0) \
-                and (self.game.pieces[self.coords[0] - 2][self.coords[1] - 1].color != self.color or isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] - 1], Blank)):
+        if (self.coords[0] - 2) >= 0 and (self.coords[1] - 1) >= 0 \
+                and (self.game.pieces[self.coords[0] - 2][self.coords[1] - 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] - 1], Blank)):
             positions.append((self.coords[0] - 2, self.coords[1] - 1))
-        if (self.coords[0] - 2) >= (0) and (self.coords[1] + 1) <= (7) \
-                and (self.game.pieces[self.coords[0] - 2][self.coords[1] + 1].color != self.color or isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] + 1], Blank)):
+        if (self.coords[0] - 2) >= 0 and (self.coords[1] + 1) <= 7 \
+                and (self.game.pieces[self.coords[0] - 2][self.coords[1] + 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] + 1], Blank)):
             positions.append((self.coords[0] - 2, self.coords[1] + 1))
-        if (self.coords[0] - 1) >= (0) and (self.coords[1] - 2) >= (0) \
-                and (self.game.pieces[self.coords[0] - 1][self.coords[1] - 2].color != self.color or isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] - 2], Blank)):
+        if (self.coords[0] - 1) >= 0 and (self.coords[1] - 2) >= 0 \
+                and (self.game.pieces[self.coords[0] - 1][self.coords[1] - 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] - 2], Blank)):
             positions.append((self.coords[0] - 1, self.coords[1] - 2))
-        if (self.coords[0] - 1) >= (0) and (self.coords[1] + 2) <= (7) \
-                and (self.game.pieces[self.coords[0] - 1][self.coords[1] + 2].color != self.color or isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] + 2], Blank)):
+        if (self.coords[0] - 1) >= 0 and (self.coords[1] + 2) <= 7 \
+                and (self.game.pieces[self.coords[0] - 1][self.coords[1] + 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] + 2], Blank)):
             positions.append((self.coords[0] - 1, self.coords[1] + 2))
-        if (self.coords[0] + 2) <= (7) and (self.coords[1] + 1) <= (7) \
-                and (self.game.pieces[self.coords[0] + 2][self.coords[1] + 1].color != self.color or isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] + 1], Blank)):
+        if (self.coords[0] + 2) <= 7 and (self.coords[1] + 1) <= 7 \
+                and (self.game.pieces[self.coords[0] + 2][self.coords[1] + 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] + 1], Blank)):
             positions.append((self.coords[0] + 2, self.coords[1] + 1))
-        if (self.coords[0] + 2) <= (7) and (self.coords[1] - 1) >= (0) \
-                and (self.game.pieces[self.coords[0] + 2][self.coords[1] - 1].color != self.color or isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] - 1], Blank)):
+        if (self.coords[0] + 2) <= 7 and (self.coords[1] - 1) >= 0 \
+                and (self.game.pieces[self.coords[0] + 2][self.coords[1] - 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] - 1], Blank)):
             positions.append((self.coords[0] + 2, self.coords[1] - 1))
-        if (self.coords[0] + 1) <= (7) and (self.coords[1] + 2) <= (7) \
-                and (self.game.pieces[self.coords[0] + 1][self.coords[1] + 2].color != self.color or isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] + 2], Blank)):
+        if (self.coords[0] + 1) <= 7 and (self.coords[1] + 2) <= 7 \
+                and (self.game.pieces[self.coords[0] + 1][self.coords[1] + 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] + 2], Blank)):
             positions.append((self.coords[0] + 1, self.coords[1] + 2))
-        if (self.coords[0] + 1) <= (7) and (self.coords[1] - 2) >= (0) \
-                and (self.game.pieces[self.coords[0] + 1][self.coords[1] - 2].color != self.color or isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] - 2], Blank)):
+        if (self.coords[0] + 1) <= 7 and (self.coords[1] - 2) >= 0 \
+                and (self.game.pieces[self.coords[0] + 1][self.coords[1] - 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] - 2], Blank)):
             positions.append((self.coords[0] + 1, self.coords[1] - 2))
 
         movements = []
@@ -54,37 +63,37 @@ class BKnight(Piece):
 
     def possible_movements(self):
         positions = []
-        if (self.coords[0] - 2) >= (0) and (self.coords[1] - 1) >= (0) \
-                and (self.game.pieces[self.coords[0] - 2][self.coords[1] - 1].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] - 2][self.coords[1] - 1], Blank)):
+        if (self.coords[0] - 2) >= 0 and (self.coords[1] - 1) >= 0 \
+                and (self.game.pieces[self.coords[0] - 2][self.coords[1] - 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] - 1], Blank)):
             positions.append((self.coords[0] - 2, self.coords[1] - 1))
-        if (self.coords[0] - 2) >= (0) and (self.coords[1] + 1) <= (7) \
-                and (self.game.pieces[self.coords[0] - 2][self.coords[1] + 1].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] - 2][self.coords[1] + 1], Blank)):
+        if (self.coords[0] - 2) >= 0 and (self.coords[1] + 1) <= 7 \
+                and (self.game.pieces[self.coords[0] - 2][self.coords[1] + 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 2][self.coords[1] + 1], Blank)):
             positions.append((self.coords[0] - 2, self.coords[1] + 1))
-        if (self.coords[0] - 1) >= (0) and (self.coords[1] - 2) >= (0) \
-                and (self.game.pieces[self.coords[0] - 1][self.coords[1] - 2].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] - 1][self.coords[1] - 2], Blank)):
+        if (self.coords[0] - 1) >= 0 and (self.coords[1] - 2) >= 0 \
+                and (self.game.pieces[self.coords[0] - 1][self.coords[1] - 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] - 2], Blank)):
             positions.append((self.coords[0] - 1, self.coords[1] - 2))
-        if (self.coords[0] - 1) >= (0) and (self.coords[1] + 2) <= (7) \
-                and (self.game.pieces[self.coords[0] - 1][self.coords[1] + 2].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] - 1][self.coords[1] + 2], Blank)):
+        if (self.coords[0] - 1) >= 0 and (self.coords[1] + 2) <= 7 \
+                and (self.game.pieces[self.coords[0] - 1][self.coords[1] + 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] - 1][self.coords[1] + 2], Blank)):
             positions.append((self.coords[0] - 1, self.coords[1] + 2))
-        if (self.coords[0] + 2) <= (7) and (self.coords[1] + 1) <= (7) \
-                and (self.game.pieces[self.coords[0] + 2][self.coords[1] + 1].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] + 2][self.coords[1] + 1], Blank)):
+        if (self.coords[0] + 2) <= 7 and (self.coords[1] + 1) <= 7 \
+                and (self.game.pieces[self.coords[0] + 2][self.coords[1] + 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] + 1], Blank)):
             positions.append((self.coords[0] + 2, self.coords[1] + 1))
-        if (self.coords[0] + 2) <= (7) and (self.coords[1] - 1) >= (0) \
-                and (self.game.pieces[self.coords[0] + 2][self.coords[1] - 1].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] + 2][self.coords[1] - 1], Blank)):
+        if (self.coords[0] + 2) <= 7 and (self.coords[1] - 1) >= 0 \
+                and (self.game.pieces[self.coords[0] + 2][self.coords[1] - 1].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 2][self.coords[1] - 1], Blank)):
             positions.append((self.coords[0] + 2, self.coords[1] - 1))
-        if (self.coords[0] + 1) <= (7) and (self.coords[1] + 2) <= (7) \
-                and (self.game.pieces[self.coords[0] + 1][self.coords[1] + 2].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] + 1][self.coords[1] + 2], Blank)):
+        if (self.coords[0] + 1) <= 7 and (self.coords[1] + 2) <= 7 \
+                and (self.game.pieces[self.coords[0] + 1][self.coords[1] + 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] + 2], Blank)):
             positions.append((self.coords[0] + 1, self.coords[1] + 2))
-        if (self.coords[0] + 1) <= (7) and (self.coords[1] - 2) >= (0) \
-                and (self.game.pieces[self.coords[0] + 1][self.coords[1] - 2].color != self.color or isinstance(
-            self.game.pieces[self.coords[0] + 1][self.coords[1] - 2], Blank)):
+        if (self.coords[0] + 1) <= 7 and (self.coords[1] - 2) >= 0 \
+                and (self.game.pieces[self.coords[0] + 1][self.coords[1] - 2].color != self.color or
+                     isinstance(self.game.pieces[self.coords[0] + 1][self.coords[1] - 2], Blank)):
             positions.append((self.coords[0] + 1, self.coords[1] - 2))
 
         movements = []
