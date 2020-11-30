@@ -25,7 +25,7 @@ jobs:
 
       - name: Executes PyInstaller
         run: |
-          pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
+          pyinstaller --onefile --windowed main.py
           cd dist
           ren main.exe QChess.exe
           move QChess.exe ..
