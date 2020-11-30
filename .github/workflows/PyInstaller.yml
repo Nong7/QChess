@@ -25,7 +25,7 @@ jobs:
 
       - name: Executes PyInstaller
         run: |
-          pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
+          pyinstaller --onefile --windowed main.py
 
       - name: Commit files
         run: |
@@ -70,7 +70,6 @@ jobs:
     - name: Executes PyInstaller
       run: |
         pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
-
 
     - uses: actions/upload-artifact@v2
       with:
