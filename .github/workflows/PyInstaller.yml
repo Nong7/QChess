@@ -25,30 +25,16 @@ jobs:
 
       - name: Executes PyInstaller
         run: |
-          pyinstaller --onefile --windowed main.py
-
-      - name: Commit files
-        run: |
+          pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
           cd dist
           ren main.exe QChess.exe
-          move QChess.exe .. -force
+          move QChess.exe ..
           cd ..
-          git pull
-          git add QChess.exe
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "Updated .exe" -a
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          branch: "main"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-  
       - uses: actions/upload-artifact@v2
         with:
-          name: exe
-          path: dist
+          name: app
+          path: QChess.exe
 
 
   Mac-Build:
@@ -70,8 +56,12 @@ jobs:
     - name: Executes PyInstaller
       run: |
         pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
+        cd dist
+        mv main.app QChess.app
+        mv QChess.app ..
+        cd ..
 
     - uses: actions/upload-artifact@v2
       with:
         name: app
-        path: dist/main.app
+        path: QChess.app
