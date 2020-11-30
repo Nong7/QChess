@@ -48,7 +48,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: exe
-          path: dist/main.exe
+          path: dist
 
 
   Mac-Build:
