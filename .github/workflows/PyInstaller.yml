@@ -1,0 +1,84 @@
+name: PyInstaller
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build1:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install PyInstaller
+
+      - name: Executes PyInstaller
+        run: |
+          pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
+
+      - name: Commit files
+        run: |
+          cd dist
+          ren main.exe QChess.exe
+          move QChess.exe .. -force
+          cd ..
+          git pull
+          git add QChess.exe
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Updated .exe" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  build2:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8.2
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install PyInstaller
+
+    - name: Executes PyInstaller
+      run: |
+        pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
+
+    - name: Commit files
+      run: |
+        rm -rf QChess.app
+        cd dist
+        mv main.app QChess.app
+        mv QChess.app ..
+        cd ..
+
+        git pull
+        git add QChess.app
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Updated .app" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
