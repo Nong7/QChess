@@ -51,6 +51,9 @@ class GameWidget(QWidget):
         self.selected_piece = None
 
     def set_up_pieces(self):
+        self.turn = "w"
+        self.main_window.update_turn_label("White's turn")
+        self.selected_piece = None
         # Ugly way of doing a fake deepcopy of a list of lists
         self.pieces = [row[:] for row in self.PIECES]
         for x in range(8):

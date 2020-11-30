@@ -34,24 +34,20 @@ class MainWindow(QMainWindow):
         self.menu_bar = self.menuBar()
 
         self.configuration_menu = self.menu_bar.addMenu("Configuration")
-        self.aspect_menu = self.menu_bar.addMenu("Aspect")
-        self.change_color = self.aspect_menu.addMenu("Change Color")
 
         # Configuration action
+        self.restart_action = QAction("Restart game", self)
+        self.restart_action.triggered.connect(lambda: self.game_widget.set_up_pieces())
+        self.configuration_menu.addAction(self.restart_action)
+
+        # Todo: game manual
+        self.manual = QAction("Game Manual", self)
+        self.configuration_menu.addAction(self.manual)
+
         self.exit_action = QAction("Exit App", self)
         self.exit_action.setShortcut("Ctrl+Q")
         self.exit_action.triggered.connect(lambda: QApplication.quit())
         self.configuration_menu.addAction(self.exit_action)
-
-        self.manual = QAction("Game Manual", self)
-        self.configuration_menu.addAction(self.manual)
-
-        # Change Color Action
-        self.classic_color = QAction("Classic")
-        self.change_color.addAction(self.classic_color)
-
-        self.brown_color = QAction("Brown")
-        self.change_color.addAction(self.brown_color)
 
         self.show()
 
