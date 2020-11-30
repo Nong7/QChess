@@ -40,8 +40,9 @@ jobs:
           git commit -m "Updated .exe" -a
 
       - name: Push changes
-        uses: ad-m/github-push-action@main
+        uses: ad-m/github-push-action@master
         with:
+          branch: "main"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   build2:
@@ -79,6 +80,7 @@ jobs:
         git commit -m "Updated .app" -a
 
     - name: Push changes
-      uses: ad-m/github-push-action@main
+      uses: ad-m/github-push-action@master
       with:
+        branch: "main"
         github_token: ${{ secrets.GITHUB_TOKEN }}
