@@ -47,10 +47,10 @@ class MainWindow(QMainWindow):
         self.configuration_menu.addAction(self.manual)
 
         # Change Color Action
-        self.classic_color = QtWidgets.QAction("Classic")
+        self.classic_color = QAction("Classic")
         self.change_color.addAction(self.classic_color)
 
-        self.brown_color = QtWidgets.QAction("Brown")
+        self.brown_color = QAction("Brown")
         self.change_color.addAction(self.brown_color)
 
         self.show()
