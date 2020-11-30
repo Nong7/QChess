@@ -2,6 +2,8 @@
 
 QChess is a minimalist chess game made by four students using Python 3 and PyQt5.
 
+<p align="center"><img src="https://raw.githubusercontent.com/Jaime02/QChess/main/img/Thumbnail.png"></p>
+
 ## Installation:
 
  - Requierements: Python 3.6 or greater
