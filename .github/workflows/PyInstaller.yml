@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build1:
+  Windows-Build:
     runs-on: windows-latest
 
     steps:
@@ -44,8 +44,14 @@ jobs:
         with:
           branch: "main"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+  
+      - uses: actions/upload-artifact@v2
+        with:
+          name: exe
+          path: dist/main.exe
 
-  build2:
+
+  Mac-Build:
     runs-on: macos-latest
 
     steps:
@@ -65,22 +71,8 @@ jobs:
       run: |
         pyinstaller --onefile --windowed -i "./img/logo.ico" main.py
 
-    - name: Commit files
-      run: |
-        rm -rf QChess.app
-        cd dist
-        mv main.app QChess.app
-        mv QChess.app ..
-        cd ..
 
-        git pull
-        git add QChess.app
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "Updated .app" -a
-
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - uses: actions/upload-artifact@v2
       with:
-        branch: "main"
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        name: app
+        path: dist/main.app
