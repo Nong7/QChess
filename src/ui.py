@@ -1,4 +1,3 @@
-from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QVBoxLayout, QMenu, \
                             QMenuBar, QAction, QApplication
 from PyQt5.QtGui import QFont
