@@ -11,11 +11,12 @@ class MainWindow(QMainWindow):
 
         self.app = app
         self.setWindowTitle("QChess")
-        self.setMinimumSize(400, 400)
+        self.setMinimumSize(400, 450)
         w = QWidget()
 
         # Main layout
         self.main_layout = QVBoxLayout()
+        self.main_layout.setAlignment(Qt.AlignHCenter)
         w.setLayout(self.main_layout)
         self.setCentralWidget(w)
         font = QFont("Arial")
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
 
         # Configuration action
         self.restart_action = QAction("Restart game", self)
-        self.restart_action.triggered.connect(lambda: self.game_widget.set_up_pieces())
+        self.restart_action.triggered.connect(lambda: self.game_widget.reset_board())
         self.configuration_menu.addAction(self.restart_action)
 
         # Todo: game manual

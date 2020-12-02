@@ -1,10 +1,11 @@
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QSizePolicy
 
 
 class Piece(QLabel):
     def __init__(self, game, x: int, y: int):
         QLabel.__init__(self)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.first_move = True
         self.coords = x, y
         self.game = game
