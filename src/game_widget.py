@@ -92,6 +92,18 @@ class GameWidget(QWidget):
             self.selected_piece.unselect()
         self.selected_piece = piece
 
+    def movements(self):
+        l = []
+        for row in self.pieces:
+            for item in row:
+                if item.color != self.turn and not isinstance(item, Blank):
+                    l.append(item)
+        mov = set()
+        for piece in l:
+            mov.union(*piece.possible_movements())
+
+        print(mov)
+
     def change_turn(self):
         # This function changes the player turn
         if self.selected_piece:

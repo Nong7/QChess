@@ -48,6 +48,8 @@ class Piece(QLabel):
 
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
+        if self.name[1] == "K":
+            self.game.movements()
 
         # First case: the piece is moved to a blank square
         if self.name == "blank":
