@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QVBoxLayout, QMenu, \
                             QMenuBar, QAction, QApplication
-from PyQt5.QtGui import QFont
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont, QDesktopServices
+from PyQt5.QtCore import Qt, QUrl, QFileInfo
 from .game_widget import GameWidget
 
 
@@ -41,9 +41,11 @@ class MainWindow(QMainWindow):
         self.restart_action.triggered.connect(lambda: self.game_widget.reset_board())
         self.configuration_menu.addAction(self.restart_action)
 
-        # Todo: game manual
         self.manual = QAction("Game Manual", self)
         self.configuration_menu.addAction(self.manual)
+
+        self.guia = QUrl.fromLocalFile(QFileInfo("./src/guide.pdf").absoluteFilePath())
+        self.manual.triggered.connect(lambda: QDesktopServices.openUrl(self.guia))
 
         self.exit_action = QAction("Exit App", self)
         self.exit_action.setShortcut("Ctrl+Q")
