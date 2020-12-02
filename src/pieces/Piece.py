@@ -45,9 +45,10 @@ class Piece(QLabel):
 
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
+        if self.name[1] == "K":
+            self.game.movements()
 
         if self.name == "blank":
-
             if self.game.selected_piece:
                 # Pawns can move two cells ahead only once
                 self.game.selected_piece.first_move = False
