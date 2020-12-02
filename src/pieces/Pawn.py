@@ -3,6 +3,11 @@ from PyQt5.QtGui import QPixmap
 from .Piece import Piece
 
 
+# The pawn piece is the only one that has not been compressed into a single class and then inherited by two other
+# classes since black pawns and white pawns have different directions. Therefore, they will have different possible
+# movements
+
+# Creation of the class WPiece which inherits from the class Piece
 class WPawn(Piece):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
@@ -40,6 +45,7 @@ class WPawn(Piece):
         return movements
 
 
+# Creation of the class BPawn which inherits from the class Piece
 class BPawn(Piece):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
@@ -55,6 +61,7 @@ class BPawn(Piece):
 
         if self.first_move:
             positions.append((coords[0] + 1, coords[1]))
+            # Avoids jumping
             if not pieces[coords[0] + 1][coords[1]].color:
                 positions.append((coords[0] + 2, coords[1]))
         elif coords[0] != 7:

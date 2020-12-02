@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
         font.setPointSize(10)
         self.setFont(font)
 
+        # Label that shows whose turn it is. It is updated in "game_widget.py" via the function "change_turn"
         self.turn_label = QLabel("White's turn")
         self.turn_label.setAlignment(Qt.AlignCenter)
         self.turn_label.setMaximumHeight(15)
@@ -36,8 +37,10 @@ class MainWindow(QMainWindow):
 
         self.configuration_menu = self.menu_bar.addMenu("Configuration")
 
-        # Configuration action
+        # Configuration menu
+        # Restart action (restarts the game)
         self.restart_action = QAction("Restart game", self)
+        # When "Restart game" is triggered it calls a lambda function which restarts the board
         self.restart_action.triggered.connect(lambda: self.game_widget.reset_board())
         self.configuration_menu.addAction(self.restart_action)
 
@@ -47,8 +50,10 @@ class MainWindow(QMainWindow):
         self.guia = QUrl.fromLocalFile(QFileInfo("./src/guide.pdf").absoluteFilePath())
         self.manual.triggered.connect(lambda: QDesktopServices.openUrl(self.guia))
 
+        # Exit action (exits the app via clicking the action or typing the shortcut)
         self.exit_action = QAction("Exit App", self)
         self.exit_action.setShortcut("Ctrl+Q")
+        # When "Exit App" is triggered it calls a lambda function that exits the app
         self.exit_action.triggered.connect(lambda: QApplication.quit())
         self.configuration_menu.addAction(self.exit_action)
 

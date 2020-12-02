@@ -77,6 +77,7 @@ class GameWidget(QWidget):
              WKing(self, 7, 4),  WBishop(self, 7, 5), WKnight(self, 7, 6), WRook(self, 7, 7)]
         ]
 
+        # Restart of the turn and the selected piece
         self.turn = "w"
         self.main_window.update_turn_label("White's turn")
         self.selected_piece = None

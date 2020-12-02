@@ -1,166 +1,37 @@
 from PyQt5.QtGui import QPixmap
 
 from .Piece import Piece
-from .Blank import Blank
+from .Rook import Rook
+from .Bishop import Bishop
 
 
-class WQueen(Piece):
+# Creation of the class Queen from where the classes BQueen and WQueen will inherit
+# This class inherits at the same time from the classes Rook and Bishop
+class Queen(Rook, Bishop):
+    def __init__(self, game, x, y):
+        Piece.__init__(self, game, x, y)
+
+    def possible_movements(self):
+        # The queen movements is a combination of the rook movements and the bishop movements so if we
+        # sum all the possible positions from both pieces we obtain the possible positions for the queen
+        positions = Rook.possible_movements(self) + Bishop.possible_movements(self)
+
+        return positions
+
+
+# Creation of the class WQueen (the parameters that change are the image, the name and the color)
+class WQueen(Queen):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
         self.image = QPixmap("./img/wQ")
         self.name = "wQ"
         self.color = "w"
 
-    def possible_movements(self):
-        positions = []
-        i = 1
-        while (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
-                and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] - i], Blank):
-            positions.append((self.coords[0] - i, self.coords[1] - i))
-            i += 1
-        if (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
-                and self.game.pieces[self.coords[0] - i][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1] - i))
 
-        i = 1
-        while (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
-                and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] - i], Blank):
-            positions.append((self.coords[0] + i, self.coords[1] - i))
-            i += 1
-        if (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
-                and self.game.pieces[self.coords[0] + i][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1] - i))
-
-        i = 1
-        while (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
-                and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] + i], Blank):
-            positions.append((self.coords[0] - i, self.coords[1] + i))
-            i += 1
-        if (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
-                and self.game.pieces[self.coords[0] - i][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1] + i))
-
-        i = 1
-        while (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
-                and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] + i], Blank):
-            positions.append((self.coords[0] + i, self.coords[1] + i))
-            i += 1
-        if (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
-                and self.game.pieces[self.coords[0] + i][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1] + i))
-
-        i = 1
-        while (self.coords[0] - i) >= 0 and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1]], Blank):
-            positions.append((self.coords[0] - i, self.coords[1]))
-            i += 1
-        if (self.coords[0] - i) >= 0 and self.game.pieces[self.coords[0] - i][self.coords[1]].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1]))
-
-        i = 1
-        while (self.coords[0] + i) <= 7 and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1]], Blank):
-            positions.append((self.coords[0] + i, self.coords[1]))
-            i += 1
-        if (self.coords[0] + i) <= 7 and self.game.pieces[self.coords[0] + i][self.coords[1]].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1]))
-
-        i = 1
-        while (self.coords[1] - i) >= 0 and isinstance(self.game.pieces[self.coords[0]][self.coords[1] - i], Blank):
-            positions.append((self.coords[0], self.coords[1] - i))
-            i += 1
-        if (self.coords[1] - i) >= 0 and self.game.pieces[self.coords[0]][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0], self.coords[1] - i))
-
-        i = 1
-        while (self.coords[1] + i) <= 7 and isinstance(self.game.pieces[self.coords[0]][self.coords[1] + i], Blank):
-            positions.append((self.coords[0], self.coords[1] + i))
-            i += 1
-        if (self.coords[1] + i) <= 7 and self.game.pieces[self.coords[0]][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0], self.coords[1] + i))
-
-        movements = []
-        for position in positions:
-            if isinstance(self.game.pieces[position[0]][position[1]], Blank) \
-                    or self.game.pieces[position[0]][position[1]].color != self.color:
-                movements.append(position)
-        return movements
-
-
-class BQueen(Piece):
+# Creation of the class BQueen (the parameters that change are the same than WQueen)
+class BQueen(Queen):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
         self.image = QPixmap("./img/bQ")
         self.name = "bQ"
         self.color = "b"
-
-    def possible_movements(self):
-        positions = []
-        i = 1
-        while (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
-                and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] - i], Blank):
-            positions.append((self.coords[0] - i, self.coords[1] - i))
-            i += 1
-        if (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
-                and self.game.pieces[self.coords[0] - i][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1] - i))
-
-        i = 1
-        while (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
-                and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] - i], Blank):
-            positions.append((self.coords[0] + i, self.coords[1] - i))
-            i += 1
-        if (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
-                and self.game.pieces[self.coords[0] + i][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1] - i))
-
-        i = 1
-        while (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
-                and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] + i], Blank):
-            positions.append((self.coords[0] - i, self.coords[1] + i))
-            i += 1
-        if (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
-                and self.game.pieces[self.coords[0] - i][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1] + i))
-
-        i = 1
-        while (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
-                and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] + i], Blank):
-            positions.append((self.coords[0] + i, self.coords[1] + i))
-            i += 1
-        if (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
-                and self.game.pieces[self.coords[0] + i][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1] + i))
-
-        i = 1
-        while (self.coords[0] - i) >= 0 and isinstance(self.game.pieces[self.coords[0] - i][self.coords[1]], Blank):
-            positions.append((self.coords[0] - i, self.coords[1]))
-            i += 1
-        if (self.coords[0] - i) >= 0 and self.game.pieces[self.coords[0] - i][self.coords[1]].color != self.color:
-            positions.append((self.coords[0] - i, self.coords[1]))
-
-        i = 1
-        while (self.coords[0] + i) <= 7 and isinstance(self.game.pieces[self.coords[0] + i][self.coords[1]], Blank):
-            positions.append((self.coords[0] + i, self.coords[1]))
-            i += 1
-        if (self.coords[0] + i) <= 7 and self.game.pieces[self.coords[0] + i][self.coords[1]].color != self.color:
-            positions.append((self.coords[0] + i, self.coords[1]))
-
-        i = 1
-        while (self.coords[1] - i) >= 0 and isinstance(self.game.pieces[self.coords[0]][self.coords[1] - i], Blank):
-            positions.append((self.coords[0], self.coords[1] - i))
-            i += 1
-        if (self.coords[1] - i) >= 0 and self.game.pieces[self.coords[0]][self.coords[1] - i].color != self.color:
-            positions.append((self.coords[0], self.coords[1] - i))
-
-        i = 1
-        while (self.coords[1] + i) <= 7 and isinstance(self.game.pieces[self.coords[0]][self.coords[1] + i], Blank):
-            positions.append((self.coords[0], self.coords[1] + i))
-            i += 1
-        if (self.coords[1] + i) <= 7 and self.game.pieces[self.coords[0]][self.coords[1] + i].color != self.color:
-            positions.append((self.coords[0], self.coords[1] + i))
-
-        movements = []
-        for position in positions:
-            if isinstance(self.game.pieces[position[0]][position[1]], Blank) \
-                    or self.game.pieces[position[0]][position[1]].color != self.color:
-                movements.append(position)
-        return movements
