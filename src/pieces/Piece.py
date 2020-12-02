@@ -29,8 +29,11 @@ class Piece(QLabel):
         self.update()
 
     def unselect(self):
+        # This function unselects a piece when another one is selected
         self.is_selected = False
         self.game.selected_piece = None
+
+        # This loop erases or the highlights that had been done
         for x in range(8):
             for y in range(8):
                 self.game.pieces[x][y].highlight = False
@@ -46,18 +49,21 @@ class Piece(QLabel):
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
 
+        # First case: the piece is moved to a blank square
         if self.name == "blank":
-
             if self.game.selected_piece:
                 # Pawns can move two cells ahead only once
                 self.game.selected_piece.first_move = False
 
+                # Pieces can only be moved to the squares that are highlighted
                 if self.highlight:
                     self.game.swap_pieces(self.coords, self.game.selected_piece.coords)
 
+        # Second case: the piece is selected for the first time
         elif self.color == self.game.turn:
             self.select()
 
+        # Third case: the piece eats another piece of the opposite color
         elif self.color != self.game.turn and self.game.selected_piece:
             # Eated piece: self
             # Eaten by: self.game.selected_piece
