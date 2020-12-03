@@ -76,6 +76,7 @@ class Piece(QLabel):
         QLabel.paintEvent(self, event)
         x, y = self.width(), self.height()
         qp = QPainter(self)
+        qp.setRenderHint(QPainter.Antialiasing)
         if (self.coords[0] + self.coords[1]) % 2 == 1:
             qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
         if self.is_selected:
