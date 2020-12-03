@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QVBoxLayout, QMenu, \
                             QMenuBar, QAction, QApplication
 from PyQt5.QtGui import QFont, QDesktopServices
-from PyQt5.QtCore import Qt, QUrl, QFileInfo
+from PyQt5.QtCore import Qt, QUrl, QFileInfo, QRect
 from .game_widget import GameWidget
 
 
@@ -14,28 +14,20 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(400, 450)
         w = QWidget()
 
-        # Main layout
-        self.main_layout = QVBoxLayout()
-        self.main_layout.setAlignment(Qt.AlignHCenter)
-        w.setLayout(self.main_layout)
         self.setCentralWidget(w)
         font = QFont("Arial")
         font.setPointSize(10)
         self.setFont(font)
 
         # Label that shows whose turn it is. It is updated in "game_widget.py" via the function "change_turn"
-        self.turn_label = QLabel("White's turn")
-        self.turn_label.setAlignment(Qt.AlignCenter)
-        self.turn_label.setMaximumHeight(15)
-        self.main_layout.addWidget(self.turn_label)
+        self.turn_label = QLabel("White's turn", w)
 
-        self.game_widget = GameWidget(self)
-        self.main_layout.addWidget(self.game_widget)
+        self.game_widget = GameWidget(self, w)
 
         # Creation of the menu bar and insertion of the different actions that it has
         self.menu_bar = self.menuBar()
 
-        self.configuration_menu = self.menu_bar.addMenu("Configuration")
+        self.configuration_menu = self.menu_bar.addMenu("Options")
 
         # Configuration menu
         # Restart action (restarts the game)
@@ -61,3 +53,27 @@ class MainWindow(QMainWindow):
 
     def update_turn_label(self, text: str):
         self.turn_label.setText(text)
+
+    def resizeEvent(self, event):
+        QMainWindow.resizeEvent(self, event)
+
+        # This is an ugly way of centering the widgets which relies in a lot of magic numbers hardcoded,
+        # but I have not found how to center the QGridLayout without destroying the geometry of its cells
+
+        self.turn_label.setGeometry((self.width() + 20) // 2 - self.turn_label.width() // 2,
+                                    0, self.turn_label.width(), 20)
+        if self.width() > self.height():
+            mx = self.width() // 2
+            x0 = mx - (self.height() - 30) // 2
+            y0 = 25
+            x = self.height() - 30
+            y = self.height() - 60
+        else:
+            mx = self.width() // 2
+            x0 = mx - (self.width() - 20) // 2
+            y0 = 25
+            x = self.width() - 25
+            y = self.width() - 55
+            self.game_widget.setGeometry(x0, y0, x, y)
+
+        self.game_widget.setGeometry(x0, y0, x, y)
