@@ -1,6 +1,5 @@
 from PyQt5.QtGui import QPixmap
 
-from .Piece import Piece
 from .Rook import Rook
 from .Bishop import Bishop
 
@@ -9,7 +8,7 @@ from .Bishop import Bishop
 # This class inherits at the same time from the classes Rook and Bishop
 class Queen(Rook, Bishop):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Rook.__init__(self, game, x, y)
 
     def possible_movements(self):
         # The queen movements is a combination of the rook movements and the bishop movements so if we
@@ -22,7 +21,7 @@ class Queen(Rook, Bishop):
 # Creation of the class WQueen (the parameters that change are the image, the name and the color)
 class WQueen(Queen):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Queen.__init__(self, game, x, y)
         self.image = QPixmap("./img/wQ")
         self.name = "wQ"
         self.color = "w"
@@ -31,7 +30,7 @@ class WQueen(Queen):
 # Creation of the class BQueen (the parameters that change are the same than WQueen)
 class BQueen(Queen):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Queen.__init__(self, game, x, y)
         self.image = QPixmap("./img/bQ")
         self.name = "bQ"
         self.color = "b"
