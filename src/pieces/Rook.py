@@ -40,7 +40,7 @@ class Rook(Piece):
 # Creation of the class WRook (the parameters that change are the image, the name and the color)
 class WRook(Rook):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Rook.__init__(self, game, x, y)
         self.image = QPixmap("./img/wR")
         self.name = "wR"
         self.color = "w"
@@ -49,7 +49,7 @@ class WRook(Rook):
 # Creation of the class BRook (the parameters that change are the same than WRook)
 class BRook(Rook):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Rook.__init__(self, game, x, y)
         self.image = QPixmap("./img/bR")
         self.name = "bR"
         self.color = "b"
