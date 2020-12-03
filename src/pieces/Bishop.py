@@ -44,7 +44,7 @@ class Bishop(Piece):
 # Creation of the class WBishop (the parameters that change are the image, the name and the color)
 class WBishop(Bishop):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Bishop.__init__(self, game, x, y)
         self.image = QPixmap("./img/wB")
         self.name = "wB"
         self.color = "w"
@@ -53,7 +53,7 @@ class WBishop(Bishop):
 # Creation of the class BBishop (the parameters that change are the same than WBishop)
 class BBishop(Bishop):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Bishop.__init__(self, game, x, y)
         self.image = QPixmap("./img/bB")
         self.name = "bB"
         self.color = "b"
