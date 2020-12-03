@@ -1,59 +1,27 @@
 from PyQt5.QtGui import QPixmap
 
 from .Piece import Piece
-from .Blank import Blank
+from .Queen import Queen
 
 
 # Creation of the class King from where the classes BKing and WKing will inherit
-# This class inherits at the same time from the class Piece
-class King(Piece):
+# This class inherits at the same time from the class Queen
+class King(Queen):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
 
     def possible_movements(self):
         # Creation of a list to append all the possible positions
         positions = []
-        i = 1
 
-        # The if statements check all the squares that surround the king to see if they go off the
-        # board and if they are a blank space, if those two conditions are correct the position is appended
-        # In the case that the first condition isn't met if the squares that surround
-        # the king are enemy pieces its position is appended
-        if (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
-                and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] - i], Blank) \
-                     or self.game.pieces[self.coords[0] - i][self.coords[1] - i].color != self.color):
-            positions.append((self.coords[0] - i, self.coords[1] - i))
+        # The king has the same possible directions than the queen so to obtain all his possible movements
+        # all we have to do is append the positions that don't move more than one square from the king
+        queen_positions = Queen.possible_movements(self)
 
-        if (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
-                and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] - i], Blank) \
-                     or self.game.pieces[self.coords[0] + i][self.coords[1] - i].color != self.color):
-            positions.append((self.coords[0] + i, self.coords[1] - i))
-
-        if (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
-                and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] + i], Blank) \
-                     or self.game.pieces[self.coords[0] - i][self.coords[1] + i].color != self.color):
-            positions.append((self.coords[0] - i, self.coords[1] + i))
-
-        if (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
-                and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] + i], Blank) \
-                     or self.game.pieces[self.coords[0] + i][self.coords[1] + i].color != self.color):
-            positions.append((self.coords[0] + i, self.coords[1] + i))
-
-        if (self.coords[0] - i) >= 0 and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1]], Blank) \
-                                          or self.game.pieces[self.coords[0] - i][self.coords[1]].color != self.color):
-            positions.append((self.coords[0] - i, self.coords[1]))
-
-        if (self.coords[0] + i) <= 7 and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1]], Blank) \
-                                          or self.game.pieces[self.coords[0] + i][self.coords[1]].color != self.color):
-            positions.append((self.coords[0] + i, self.coords[1]))
-
-        if (self.coords[1] - i) >= 0 and (isinstance(self.game.pieces[self.coords[0]][self.coords[1] - i], Blank) \
-                                          or self.game.pieces[self.coords[0]][self.coords[1] - i].color != self.color):
-            positions.append((self.coords[0], self.coords[1] - i))
-
-        if (self.coords[1] + i) <= 7 and (isinstance(self.game.pieces[self.coords[0]][self.coords[1] + i], Blank) \
-                                          or self.game.pieces[self.coords[0]][self.coords[1] + i].color != self.color):
-            positions.append((self.coords[0], self.coords[1] + i))
+        for position in queen_positions:
+            if (self.coords[0] - 1 <= position[0] <= self.coords[0] + 1) \
+                    and (self.coords[1] - 1 <= position[1] <= self.coords[1] + 1):
+                positions.append(position)
 
         return positions
 
@@ -74,4 +42,3 @@ class BKing(King):
         self.image = QPixmap("./img/bK")
         self.name = "bK"
         self.color = "b"
-        
