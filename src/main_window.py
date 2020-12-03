@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.manual = QAction("Game Manual", self)
         self.configuration_menu.addAction(self.manual)
 
-        self.guia = QUrl.fromLocalFile(QFileInfo("./src/guide.pdf").absoluteFilePath())
+        self.guia = QUrl.fromLocalFile(QFileInfo("./guide.pdf").absoluteFilePath())
         self.manual.triggered.connect(lambda: QDesktopServices.openUrl(self.guia))
 
         # Exit action (exits the app via clicking the action or typing the shortcut)
