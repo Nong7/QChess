@@ -1,6 +1,5 @@
 from PyQt5.QtGui import QPixmap
 
-from .Piece import Piece
 from .Queen import Queen
 
 
@@ -8,7 +7,7 @@ from .Queen import Queen
 # This class inherits at the same time from the class Queen
 class King(Queen):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Queen.__init__(self, game, x, y)
 
     def possible_movements(self):
         # Creation of a list to append all the possible positions
@@ -29,7 +28,7 @@ class King(Queen):
 # Creation of the class WKing (the parameters that change are the image, the name and the color)
 class WKing(King):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        King.__init__(self, game, x, y)
         self.image = QPixmap("./img/wK")
         self.name = "wK"
         self.color = "w"
@@ -38,7 +37,7 @@ class WKing(King):
 # Creation of the class BKing (the parameters that change are the same than WKing)
 class BKing(King):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        King.__init__(self, game, x, y)
         self.image = QPixmap("./img/bK")
         self.name = "bK"
         self.color = "b"

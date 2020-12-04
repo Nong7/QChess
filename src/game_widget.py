@@ -10,8 +10,8 @@ from .pieces.Rook import WRook, BRook
 
 
 class GameWidget(QWidget):
-    def __init__(self, window):
-        QWidget.__init__(self)
+    def __init__(self, window, w):
+        QWidget.__init__(self, w)
 
         self.main_window = window
 
@@ -174,11 +174,3 @@ class GameWidget(QWidget):
         w1.update()
         w2.update()
         self.change_turn()
-
-    def resizeEvent(self, event):
-        QWidget.resizeEvent(self, event)
-        # Keeps square aspect ratio
-        if self.width() > self.height():
-            self.resize(self.height(), self.height())
-        else:
-            self.resize(self.width(), self.width())

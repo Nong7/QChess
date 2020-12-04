@@ -41,7 +41,7 @@ class Knight(Piece):
 # Creation of the class WKnight (the parameters that change are the image, the name and the color)
 class WKnight(Knight):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Knight.__init__(self, game, x, y)
         self.image = QPixmap("./img/wN")
         self.name = "wN"
         self.color = "w"
@@ -50,7 +50,7 @@ class WKnight(Knight):
 # Creation of the class BKnight (the parameters that change are the same than WKnight)
 class BKnight(Knight):
     def __init__(self, game, x, y):
-        Piece.__init__(self, game, x, y)
+        Knight.__init__(self, game, x, y)
         self.image = QPixmap("./img/bN")
         self.name = "bN"
         self.color = "b"
