@@ -18,7 +18,8 @@ class GameWidget(QWidget):
         # Main layout
         self.grid_layout: QGridLayout = QGridLayout()
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.grid_layout.setSpacing(4)
+        self.grid_layout.setHorizontalSpacing(0)
+        self.grid_layout.setVerticalSpacing(0)
         self.setLayout(self.grid_layout)
 
         # Initial board state
