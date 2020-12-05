@@ -15,6 +15,16 @@ class WPawn(Piece):
         self.name = "wP"
         self.color = "w"
 
+    def possible_eatings(self):
+        coords = self.coords
+        eatings = []
+        if not coords[1] == 7 and not coords[0] == 7:
+            eatings.append((coords[0] - 1, coords[1] + 1))
+
+        if not coords[1] == 0 and not coords[0] == 7:
+            eatings.append((coords[0] - 1, coords[1] - 1))
+        return eatings
+
     def possible_movements(self):
         # positions are not movements
         coords = self.coords
@@ -52,6 +62,16 @@ class BPawn(Piece):
         self.image = QPixmap("./img/bP")
         self.name = "bP"
         self.color = "b"
+
+    def possible_eatings(self):
+        coords = self.coords
+        eatings = []
+        if not coords[1] == 7 and not coords[0] == 7:
+            eatings.append((coords[0] + 1, coords[1] + 1))
+
+        if not coords[1] == 0 and not coords[0] == 7:
+            eatings.append((coords[0] + 1, coords[1] - 1))
+        return eatings
 
     def possible_movements(self):
         # positions are not movements

@@ -2,6 +2,7 @@ from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtWidgets import QLabel, QSizePolicy
 
 
+
 class Piece(QLabel):
     def __init__(self, game, x: int, y: int):
         QLabel.__init__(self)
@@ -48,8 +49,7 @@ class Piece(QLabel):
 
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
-        if self.name[1] == "K":
-            self.game.movements()
+
 
         # First case: the piece is moved to a blank square
         if self.name == "blank":
@@ -82,7 +82,7 @@ class Piece(QLabel):
             qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
         if self.is_selected:
             # Fills the background in yellow if the piece is selected
-            qp.fillRect(0, 0, x, y, QColor(255, 240, 0))
+            qp.fillRect(0, 0, x, y, QColor(225, 240, 0))
         if self.highlight:
             qp.fillRect(0, 0, x, y, QColor(0, 255, 0))
         qp.drawPixmap(0, 0, x, y, self.image)

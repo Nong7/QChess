@@ -100,9 +100,27 @@ class GameWidget(QWidget):
                     l.append(item)
         mov = set()
         for piece in l:
-            mov.union(*piece.possible_movements())
+            if piece.name == "bP":
+                if self.turn == "w":
+                    mov = mov.union(piece.possible_eatings())
+            elif piece.name == "wP":
+                if self.turn == "b":
+                    mov = mov.union(piece.possible_eatings())
+            else:
+                mov = mov.union(piece.possible_movements())
+        print("ori",mov)
+        return mov
 
-        print(mov)
+    def free_movements(self):
+        mov = self.movements()
+        pos_mov = self.selected_piece.possible_movements()
+        print("dis",pos_mov)
+        for i in mov:
+            for j in pos_mov:
+                if i == j:
+                    pos_mov.remove(i)
+        return pos_mov
+
 
     def change_turn(self):
         # This function changes the player turn
@@ -111,9 +129,12 @@ class GameWidget(QWidget):
         if self.turn == "b":
             self.turn = "w"
             self.main_window.update_turn_label("White's turn")
+
         else:
             self.turn = "b"
             self.main_window.update_turn_label("Black's turn")
+
+
 
     def update_board(self):
         # This function updates the board when a piece has been moved
@@ -131,10 +152,14 @@ class GameWidget(QWidget):
     def highlight_possible_moves(self):
         # This function sets the highlight state True of the pieces which a piece can eat or move to them
         if self.selected_piece:
-            possible_movements = self.selected_piece.possible_movements()
+            if self.selected_piece.name[1]!="K":
+                possible_movements = self.selected_piece.possible_movements()
+            else:
+                possible_movements = self.free_movements()
             for movement in possible_movements:
                 self.pieces[movement[0]][movement[1]].highlight = True
                 self.pieces[movement[0]][movement[1]].update()
+
 
     def eat_piece(self, eater_coords, eated_coords):
         # This function carries out the eating process of a piece

@@ -1,26 +1,80 @@
 from PyQt5.QtGui import QPixmap
 
-from .Queen import Queen
+from .Blank import Blank
+from .Piece import Piece, QColor, QPainter, QLabel
+
 
 
 # Creation of the class King from where the classes BKing and WKing will inherit
-# This class inherits at the same time from the class Queen
-class King(Queen):
+# This class inherits at the same time from the class Piece
+class King(Piece):
     def __init__(self, game, x, y):
-        Queen.__init__(self, game, x, y)
+        Piece.__init__(self, game, x, y)
+
+    def is_on_check(self):
+        check = False
+        mov = self.game.movements()
+
+        for position in mov:
+            if self.coords[0] == position[0] and self.coords[1] == position[1]:
+                check = True
+                print(self.coords[0],self.coords[1])
+                print(position)
+        print(mov)
+        return check
+
+    def paintEvent(self, event):
+        Piece.paintEvent(self, event)
+        x, y = self.width(), self.height()
+        qp = QPainter(self)
+        if self.is_on_check():
+            qp.fillRect(0, 0, x, y, QColor(225, 0, 0))
+
 
     def possible_movements(self):
         # Creation of a list to append all the possible positions
         positions = []
+        i = 1
 
-        # The king has the same possible directions than the queen so to obtain all his possible movements
-        # all we have to do is append the positions that don't move more than one square from the king
-        queen_positions = Queen.possible_movements(self)
+        # The if statements check all the squares that surround the king to see if they go off the
+        # board and if they are a blank space, if those two conditions are correct the position is appended
+        # In the case that the first condition isn't met if the squares that surround
+        # the king are enemy pieces its position is appended
+        if (self.coords[0] - i) >= 0 and (self.coords[1] - i) >= 0 \
+                and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] - i], Blank) \
+                     or self.game.pieces[self.coords[0] - i][self.coords[1] - i].color != self.color):
+            positions.append((self.coords[0] - i, self.coords[1] - i))
 
-        for position in queen_positions:
-            if (self.coords[0] - 1 <= position[0] <= self.coords[0] + 1) \
-                    and (self.coords[1] - 1 <= position[1] <= self.coords[1] + 1):
-                positions.append(position)
+        if (self.coords[0] + i) <= 7 and (self.coords[1] - i) >= 0 \
+                and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] - i], Blank) \
+                     or self.game.pieces[self.coords[0] + i][self.coords[1] - i].color != self.color):
+            positions.append((self.coords[0] + i, self.coords[1] - i))
+
+        if (self.coords[0] - i) >= 0 and (self.coords[1] + i) <= 7 \
+                and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1] + i], Blank) \
+                     or self.game.pieces[self.coords[0] - i][self.coords[1] + i].color != self.color):
+            positions.append((self.coords[0] - i, self.coords[1] + i))
+
+        if (self.coords[0] + i) <= 7 and (self.coords[1] + i) <= 7 \
+                and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1] + i], Blank) \
+                     or self.game.pieces[self.coords[0] + i][self.coords[1] + i].color != self.color):
+            positions.append((self.coords[0] + i, self.coords[1] + i))
+
+        if (self.coords[0] - i) >= 0 and (isinstance(self.game.pieces[self.coords[0] - i][self.coords[1]], Blank) \
+                                          or self.game.pieces[self.coords[0] - i][self.coords[1]].color != self.color):
+            positions.append((self.coords[0] - i, self.coords[1]))
+
+        if (self.coords[0] + i) <= 7 and (isinstance(self.game.pieces[self.coords[0] + i][self.coords[1]], Blank) \
+                                          or self.game.pieces[self.coords[0] + i][self.coords[1]].color != self.color):
+            positions.append((self.coords[0] + i, self.coords[1]))
+
+        if (self.coords[1] - i) >= 0 and (isinstance(self.game.pieces[self.coords[0]][self.coords[1] - i], Blank) \
+                                          or self.game.pieces[self.coords[0]][self.coords[1] - i].color != self.color):
+            positions.append((self.coords[0], self.coords[1] - i))
+
+        if (self.coords[1] + i) <= 7 and (isinstance(self.game.pieces[self.coords[0]][self.coords[1] + i], Blank) \
+                                          or self.game.pieces[self.coords[0]][self.coords[1] + i].color != self.color):
+            positions.append((self.coords[0], self.coords[1] + i))
 
         return positions
 
@@ -34,6 +88,7 @@ class WKing(King):
         self.color = "w"
 
 
+
 # Creation of the class BKing (the parameters that change are the same than WKing)
 class BKing(King):
     def __init__(self, game, x, y):
@@ -41,3 +96,4 @@ class BKing(King):
         self.image = QPixmap("./img/bK")
         self.name = "bK"
         self.color = "b"
+        
