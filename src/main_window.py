@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QLineEdit, QVBoxLayout, QMenu, \
-                            QMenuBar, QAction, QApplication
+from PyQt5.QtCore import Qt, QUrl, QFileInfo
 from PyQt5.QtGui import QFont, QDesktopServices, QPalette, QColor
-from PyQt5.QtCore import Qt, QUrl, QFileInfo, QRect
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QAction, QApplication
+
 from .game_widget import GameWidget
 
 
@@ -45,7 +45,6 @@ class MainWindow(QMainWindow):
         self.restart_action.triggered.connect(lambda: self.game_widget.reset_board())
         self.options_menu.addAction(self.restart_action)
 
-
         # Exit action (exits the app via clicking the action or typing the shortcut)
         self.exit_action = QAction("Exit App", self)
         self.exit_action.setShortcut("Ctrl+Q")
@@ -65,19 +64,19 @@ class MainWindow(QMainWindow):
         # but I have not found how to center the QGridLayout without destroying the geometry of its cells
 
         self.turn_label.setGeometry((self.width() + 20) // 2 - self.turn_label.width() // 2,
-                                    0, self.turn_label.width(), 20)
+                                    5, self.turn_label.width(), 20)
         if self.width() > self.height():
             mx = self.width() // 2
             x0 = mx - (self.height() - 30) // 2
-            y0 = 25
+            y0 = 30
             x = self.height() - 30
             y = self.height() - 60
         else:
             mx = self.width() // 2
-            x0 = mx - (self.width() - 20) // 2
-            y0 = 25
-            x = self.width() - 25
-            y = self.width() - 55
+            x0 = mx - (self.width() - 25) // 2
+            y0 = 30
+            x = self.width() - 30
+            y = self.width() - 60
             self.game_widget.setGeometry(x0, y0, x, y)
 
         self.game_widget.setGeometry(x0, y0, x, y)
@@ -86,20 +85,21 @@ class MainWindow(QMainWindow):
         if self.action_change_theme.text() == "Set dark theme":
             # Set dark theme
             dark_theme = QPalette()
-            dark_theme.setColor(QPalette.Window, QColor(53, 53, 53))
-            dark_theme.setColor(QPalette.WindowText, Qt.black)
-            dark_theme.setColor(QPalette.Base, QColor(25, 25, 25))
-            dark_theme.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-            dark_theme.setColor(QPalette.Text, Qt.white)
-            dark_theme.setColor(QPalette.Button, QColor(53, 53, 53))
-            dark_theme.setColor(QPalette.Link, QColor(200, 130, 218))
-            dark_theme.setColor(QPalette.Highlight, QColor(42, 130, 218))
-            dark_theme.setColor(QPalette.HighlightedText, Qt.black)
+
+            # Background color
+            dark_theme.setColor(QPalette.Window, QColor(30, 30, 30))
+
+            # Text label color
+            dark_theme.setColor(QPalette.WindowText, Qt.white)
+
             self.setPalette(dark_theme)
+            self.menu_bar.setStyleSheet("""QMenuBar {background-color: black;}
+            QMenuBar::item {background-color: #383838; color: white}""")
             self.action_change_theme.setText("Set light theme")
         else:
             # Set light mode
-            light_mode = QPalette(self.style().standardPalette())
-            self.setPalette(light_mode)
+            light_theme = QPalette(self.style().standardPalette())
+            self.setPalette(light_theme)
             self.action_change_theme.setText("Set dark theme")
-
+            self.menu_bar.setStyleSheet("""QMenuBar {background-color: white;}
+            QMenuBar::item {background-color: white; color: black}""")
