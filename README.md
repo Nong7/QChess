@@ -2,7 +2,13 @@
 
 QChess is a minimalist chess game made by four students using Python 3 and PyQt5.
 
-<p align="center"><img src="https://raw.githubusercontent.com/Jaime02/QChess/main/img/Thumbnail.png"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/Jaime02/QChess/main/images/Thumbnail.png"></p>
+
+## Features
+ - Piece selection highlight
+ - Dark mode
+ - Different piece set images avaiable
+ - Minimalist UI
 
 ## Installation:
 
