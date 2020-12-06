@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget, QGridLayout, QMessageBox
 from PyQt5.QtGui import QPixmap
 from .pieces.Bishop import WBishop, BBishop
 from .pieces.Blank import Blank
@@ -95,34 +95,27 @@ class GameWidget(QWidget):
             self.selected_piece.unselect()
         self.selected_piece = piece
 
-    def movements(self):
-        l = []
+    def opponent_eatings(self):
+        opponent_pieces = []
         for row in self.pieces:
             for item in row:
                 if item.color != self.turn and not isinstance(item, Blank):
-                    l.append(item)
+                    opponent_pieces.append(item)
+
         mov = set()
-        for piece in l:
-            if piece.name == "bP":
-                if self.turn == "w":
-                    mov = mov.union(piece.possible_eatings())
-            elif piece.name == "wP":
-                if self.turn == "b":
-                    mov = mov.union(piece.possible_eatings())
+        for piece in opponent_pieces:
+            if piece.name[1] == "P":
+                mov = mov.union(piece.possible_eatings())
             else:
                 mov = mov.union(piece.possible_movements())
-        # print("ori", mov)
+
         return mov
 
     def free_movements(self):
-        mov = self.movements()
-        pos_mov = self.selected_piece.possible_movements()
-        # print("dis", pos_mov)
-        for i in mov:
-            for j in pos_mov:
-                if i == j:
-                    pos_mov.remove(i)
-        return pos_mov
+        mov = self.opponent_eatings()
+        # Selected piece is the king
+        pos_mov = set(self.selected_piece.possible_movements())
+        return pos_mov.difference(mov)
 
     def change_turn(self):
         # This function changes the player turn
@@ -152,7 +145,7 @@ class GameWidget(QWidget):
     def highlight_possible_moves(self):
         # This function sets the highlight state True of the pieces which a piece can eat or move to them
         if self.selected_piece:
-            if self.selected_piece.name[1]!="K":
+            if self.selected_piece.name[1] != "K":
                 possible_movements = self.selected_piece.possible_movements()
             else:
                 possible_movements = self.free_movements()
@@ -205,3 +198,7 @@ class GameWidget(QWidget):
                 if not isinstance(piece, Blank):
                     piece.image_path = f"./images/{self.piece_set}/{piece.image_path[-2:]}"
                     piece.image = QPixmap(piece.image_path)
+
+    def game_over(self, winner: str):
+        QMessageBox.about(self, "Game over", winner)
+        self.reset_board()

@@ -11,15 +11,8 @@ class King(Piece):
         Piece.__init__(self, game, x, y)
 
     def is_on_check(self):
-        mov = self.game.movements()
-
-        for position in mov:
-            if self.coords[0] == position[0] and self.coords[1] == position[1]:
-                return True
-                # print(self.coords[0], self.coords[1])
-                # print(position)
-        # print(mov)
-        return False
+        mov = self.game.opponent_eatings()
+        return any(self.coords == position for position in mov)
 
     def paintEvent(self, event):
         Piece.paintEvent(self, event)

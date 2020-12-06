@@ -50,7 +50,7 @@ class Piece(QLabel):
     def mousePressEvent(self, event):
         QLabel.mousePressEvent(self, event)
         if self.name[1] == "K":
-            self.game.movements()
+            self.game.opponent_eatings()
 
         # First case: the piece is moved to a blank square
         if self.name == "blank":
@@ -70,7 +70,12 @@ class Piece(QLabel):
         elif self.color != self.game.turn and self.game.selected_piece:
             # Eated piece: self
             # Eaten by: self.game.selected_piece
-            if self.highlight:
+            if self.name[1] == "K":
+                if self.name[0] == "b":
+                    self.game.game_over("Whites wins!")
+                else:
+                    self.game.game_over("Blacks wins!")
+            elif self.highlight:
                 # Pawns can move two cells ahead only once
                 self.game.selected_piece.first_move = False
                 self.game.eat_piece(self.game.selected_piece.coords, self.coords)

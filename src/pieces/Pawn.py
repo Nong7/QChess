@@ -20,10 +20,20 @@ class WPawn(Piece):
         coords = self.coords
         eatings = []
         if not coords[1] == 7 and not coords[0] == 7:
-            eatings.append((coords[0] - 1, coords[1] + 1))
+            if self.game.turn == "b":
+                if self.game.pieces[coords[0] - 1][coords[1] + 1].color == "b":
+                    eatings.append((coords[0] - 1, coords[1] + 1))
+            else:
+                if self.game.pieces[coords[0] - 1][coords[1] + 1].color == "w":
+                    eatings.append((coords[0] - 1, coords[1] + 1))
 
         if not coords[1] == 0 and not coords[0] == 7:
-            eatings.append((coords[0] - 1, coords[1] - 1))
+            if self.game.turn == "b":
+                if self.game.pieces[coords[0] - 1][coords[1] - 1].color == "b":
+                    eatings.append((coords[0] - 1, coords[1] - 1))
+            else:
+                if self.game.pieces[coords[0] - 1][coords[1] - 1].color == "w":
+                    eatings.append((coords[0] - 1, coords[1] - 1))
         return eatings
 
     def possible_movements(self):
@@ -68,11 +78,22 @@ class BPawn(Piece):
     def possible_eatings(self):
         coords = self.coords
         eatings = []
+
         if not coords[1] == 7 and not coords[0] == 7:
-            eatings.append((coords[0] + 1, coords[1] + 1))
+            if self.game.turn == "b":
+                if self.game.pieces[coords[0] + 1][coords[1] + 1].color == "b":
+                    eatings.append((coords[0] + 1, coords[1] + 1))
+            else:
+                if self.game.pieces[coords[0] + 1][coords[1] + 1].color == "w":
+                    eatings.append((coords[0] + 1, coords[1] + 1))
 
         if not coords[1] == 0 and not coords[0] == 7:
-            eatings.append((coords[0] + 1, coords[1] - 1))
+            if self.game.turn == "b":
+                if self.game.pieces[coords[0] + 1][coords[1] - 1].color == "b":
+                    eatings.append((coords[0] + 1, coords[1] - 1))
+            else:
+                if self.game.pieces[coords[0] + 1][coords[1] - 1].color == "w":
+                    eatings.append((coords[0] + 1, coords[1] - 1))
         return eatings
 
     def possible_movements(self):
