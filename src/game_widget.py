@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QGridLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 from .pieces.Bishop import WBishop, BBishop
 from .pieces.Blank import Blank
 from .pieces.King import WKing, BKing
@@ -21,6 +21,8 @@ class GameWidget(QWidget):
         self.grid_layout.setHorizontalSpacing(0)
         self.grid_layout.setVerticalSpacing(0)
         self.setLayout(self.grid_layout)
+
+        self.piece_set = "Default"
 
         # Initial board state
         self.pieces = [
@@ -109,19 +111,18 @@ class GameWidget(QWidget):
                     mov = mov.union(piece.possible_eatings())
             else:
                 mov = mov.union(piece.possible_movements())
-        print("ori",mov)
+        # print("ori", mov)
         return mov
 
     def free_movements(self):
         mov = self.movements()
         pos_mov = self.selected_piece.possible_movements()
-        print("dis",pos_mov)
+        # print("dis", pos_mov)
         for i in mov:
             for j in pos_mov:
                 if i == j:
                     pos_mov.remove(i)
         return pos_mov
-
 
     def change_turn(self):
         # This function changes the player turn
@@ -134,8 +135,6 @@ class GameWidget(QWidget):
         else:
             self.turn = "b"
             self.main_window.update_turn_label("Black's turn")
-
-
 
     def update_board(self):
         # This function updates the board when a piece has been moved
@@ -160,7 +159,6 @@ class GameWidget(QWidget):
             for movement in possible_movements:
                 self.pieces[movement[0]][movement[1]].highlight = True
                 self.pieces[movement[0]][movement[1]].update()
-
 
     def eat_piece(self, eater_coords, eated_coords):
         # This function carries out the eating process of a piece
@@ -200,3 +198,10 @@ class GameWidget(QWidget):
         w1.update()
         w2.update()
         self.change_turn()
+
+    def change_images(self):
+        for row in self.pieces:
+            for piece in row:
+                if not isinstance(piece, Blank):
+                    piece.image_path = f"./images/{self.piece_set}/{piece.image_path[-2:]}"
+                    piece.image = QPixmap(piece.image_path)

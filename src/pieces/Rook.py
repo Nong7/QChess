@@ -16,7 +16,7 @@ class Rook(Piece):
         positions = []
         # Creation of a list with all the comparisons and operations that are going to be needed to check
         # the four possible set of positions (usage of the operator library)
-        operators = [[operator.sub, operator.ge, 0, 1, 0], [operator.add, operator.le, 7, 1, 0], \
+        operators = [[operator.sub, operator.ge, 0, 1, 0], [operator.add, operator.le, 7, 1, 0],
                      [operator.sub, operator.ge, 0, 0, 1], [operator.add, operator.le, 7, 0, 1]]
 
         # The while loop checks all the positions of the columns and rows containing the rook and append
@@ -41,7 +41,8 @@ class Rook(Piece):
 class WRook(Rook):
     def __init__(self, game, x, y):
         Rook.__init__(self, game, x, y)
-        self.image = QPixmap("./img/wR")
+        self.image_path = f"./images/{self.game.piece_set}/wR"
+        self.image = QPixmap(self.image_path)
         self.name = "wR"
         self.color = "w"
 
@@ -50,6 +51,7 @@ class WRook(Rook):
 class BRook(Rook):
     def __init__(self, game, x, y):
         Rook.__init__(self, game, x, y)
-        self.image = QPixmap("./img/bR")
+        self.image_path = f"./images/{self.game.piece_set}/bR"
+        self.image = QPixmap(self.image_path)
         self.name = "bR"
         self.color = "b"

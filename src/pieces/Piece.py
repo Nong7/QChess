@@ -6,6 +6,7 @@ class Piece(QLabel):
     def __init__(self, game, x: int, y: int):
         QLabel.__init__(self)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.image_set = game.piece_set
         self.first_move = True
         self.coords = x, y
         self.game = game
@@ -78,11 +79,35 @@ class Piece(QLabel):
         QLabel.paintEvent(self, event)
         x, y = self.width(), self.height()
         qp = QPainter(self)
-        if (self.coords[0] + self.coords[1]) % 2 == 1:
-            qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
+
+        if self.game.main_window.action_change_theme.text() == "Set dark theme":
+            # Paints the piece using white theme
+            if (self.coords[0] + self.coords[1]) % 2 == 1:
+                qp.fillRect(0, 0, x, y, QColor(255, 255, 255))
+            else:
+                qp.fillRect(0, 0, x, y, QColor(180, 180, 180))
+        else:
+            # Paints the piece using dark theme
+            if (self.coords[0] + self.coords[1]) % 2 == 1:
+                qp.fillRect(0, 0, x, y, QColor(200, 200, 200))
+            else:
+                qp.fillRect(0, 0, x, y, QColor(80, 80, 80))
+
         if self.is_selected:
             # Fills the background in yellow if the piece is selected
-            qp.fillRect(0, 0, x, y, QColor(255, 240, 0))
+            if self.game.main_window.action_change_theme.text() == "Set dark theme":
+                qp.fillRect(0, 0, x, y, QColor(255, 240, 0))
+            else:
+                qp.fillRect(0, 0, x, y, QColor(180, 160, 0))
+
         if self.highlight:
-            qp.fillRect(0, 0, x, y, QColor(0, 255, 0))
+            # Fills the background in green if a piece can be moved to this location
+            # p stands for padding
+            p = self.height() * 5 // 100
+
+            if self.game.main_window.action_change_theme.text() == "Set dark theme":
+                qp.fillRect(p, p, x - 2 * p, y - 2 * p, QColor(0, 255, 0))
+            else:
+                qp.fillRect(p, p, x - 2 * p, y - 2 * p, QColor(0, 180, 0))
+
         qp.drawPixmap(0, 0, x, y, self.image)

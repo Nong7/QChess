@@ -16,9 +16,9 @@ class Bishop(Piece):
         positions = []
         # Creation of a list with all the comparisons and operations that are going to be needed to check
         # the four possible set of positions (usage of the operator library)
-        operators = [[operator.sub, operator.sub, operator.ge, operator.ge, 0, 0], \
-                     [operator.add, operator.sub, operator.le, operator.ge, 7, 0], \
-                     [operator.sub, operator.add, operator.ge, operator.le, 0, 7], \
+        operators = [[operator.sub, operator.sub, operator.ge, operator.ge, 0, 0],
+                     [operator.add, operator.sub, operator.le, operator.ge, 7, 0],
+                     [operator.sub, operator.add, operator.ge, operator.le, 0, 7],
                      [operator.add, operator.add, operator.le, operator.le, 7, 7]]
 
         # The while loop checks all the positions of the diagonals and append to the list the ones
@@ -45,7 +45,8 @@ class Bishop(Piece):
 class WBishop(Bishop):
     def __init__(self, game, x, y):
         Bishop.__init__(self, game, x, y)
-        self.image = QPixmap("./img/wB")
+        self.image_path = f"./images/{self.game.piece_set}/wB"
+        self.image = QPixmap(self.image_path)
         self.name = "wB"
         self.color = "w"
 
@@ -54,6 +55,7 @@ class WBishop(Bishop):
 class BBishop(Bishop):
     def __init__(self, game, x, y):
         Bishop.__init__(self, game, x, y)
-        self.image = QPixmap("./img/bB")
+        self.image_path = f"./images/{self.game.piece_set}/bB"
+        self.image = QPixmap(self.image_path)
         self.name = "bB"
         self.color = "b"

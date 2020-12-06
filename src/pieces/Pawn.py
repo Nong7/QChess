@@ -11,7 +11,8 @@ from .Piece import Piece
 class WPawn(Piece):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
-        self.image = QPixmap("./img/wP")
+        self.image_path = f"./images/{self.game.piece_set}/wP"
+        self.image = QPixmap(self.image_path)
         self.name = "wP"
         self.color = "w"
 
@@ -59,7 +60,8 @@ class WPawn(Piece):
 class BPawn(Piece):
     def __init__(self, game, x, y):
         Piece.__init__(self, game, x, y)
-        self.image = QPixmap("./img/bP")
+        self.image_path = f"./images/{self.game.piece_set}/bP"
+        self.image = QPixmap(self.image_path)
         self.name = "bP"
         self.color = "b"
 

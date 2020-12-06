@@ -22,7 +22,8 @@ class Queen(Rook, Bishop):
 class WQueen(Queen):
     def __init__(self, game, x, y):
         Queen.__init__(self, game, x, y)
-        self.image = QPixmap("./img/wQ")
+        self.image_path = f"./images/{self.game.piece_set}/wQ"
+        self.image = QPixmap(self.image_path)
         self.name = "wQ"
         self.color = "w"
 
@@ -31,6 +32,7 @@ class WQueen(Queen):
 class BQueen(Queen):
     def __init__(self, game, x, y):
         Queen.__init__(self, game, x, y)
-        self.image = QPixmap("./img/bQ")
+        self.image_path = f"./images/{self.game.piece_set}/bQ"
+        self.image = QPixmap(self.image_path)
         self.name = "bQ"
         self.color = "b"

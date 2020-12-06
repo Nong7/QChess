@@ -42,7 +42,8 @@ class Knight(Piece):
 class WKnight(Knight):
     def __init__(self, game, x, y):
         Knight.__init__(self, game, x, y)
-        self.image = QPixmap("./img/wN")
+        self.image_path = f"./images/{self.game.piece_set}/wN"
+        self.image = QPixmap(self.image_path)
         self.name = "wN"
         self.color = "w"
 
@@ -51,6 +52,7 @@ class WKnight(Knight):
 class BKnight(Knight):
     def __init__(self, game, x, y):
         Knight.__init__(self, game, x, y)
-        self.image = QPixmap("./img/bN")
+        self.image_path = f"./images/{self.game.piece_set}/bN"
+        self.image = QPixmap(self.image_path)
         self.name = "bN"
         self.color = "b"
