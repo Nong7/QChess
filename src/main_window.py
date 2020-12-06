@@ -39,6 +39,7 @@ class ChangePiecesWindow(QMainWindow):
 
         self.cancel_button = QPushButton("Cancel", cw)
         self.cancel_button.setGeometry(100, 80, 90, 30)
+        self.cancel_button.clicked.connect(lambda: self.close())
 
         self.setFixedSize(200, 120)
 

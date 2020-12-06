@@ -11,16 +11,15 @@ class King(Piece):
         Piece.__init__(self, game, x, y)
 
     def is_on_check(self):
-        check = False
         mov = self.game.movements()
 
         for position in mov:
             if self.coords[0] == position[0] and self.coords[1] == position[1]:
-                check = True
+                return True
                 # print(self.coords[0], self.coords[1])
                 # print(position)
         # print(mov)
-        return check
+        return False
 
     def paintEvent(self, event):
         Piece.paintEvent(self, event)
@@ -28,6 +27,8 @@ class King(Piece):
         qp = QPainter(self)
         if self.is_on_check():
             qp.fillRect(0, 0, x, y, QColor(225, 0, 0))
+
+        qp.drawPixmap(0, 0, x, y, self.image)
 
     def possible_movements(self):
         # Creation of a list to append all the possible positions
